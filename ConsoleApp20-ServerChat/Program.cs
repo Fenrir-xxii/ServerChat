@@ -1,9 +1,21 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ConsoleApp20_ServerChat;
 using ConsoleApp20_ServerChat.Models;
+using ConsoleApp20_ServerChat.Models_DB;
 using ConsoleApp20_ServerChat.Models_Server_Client;
 using System.Text;
 using System.Text.Json;
+
+//using (var context = new ChatDbContext())
+//{
+//    // Creates the database if not exists
+//    //context.Database.EnsureCreated();
+//    context.Add(new User { Name ="userTest", Login="user1", IsOnline=true });
+//    // Saves changes
+//    context.SaveChanges();
+//}
+
+
 
 var server = new ChatServer("127.0.0.1", 5555);
 

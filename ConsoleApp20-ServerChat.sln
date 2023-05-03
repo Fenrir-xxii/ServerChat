@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp20-ServerChat", "ConsoleApp20-ServerChat\ConsoleApp20-ServerChat.csproj", "{2B80A11E-3790-49D0-B52D-EBA3DD5372F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp20-ServerChat", "ConsoleApp20-ServerChat\ConsoleApp20-ServerChat.csproj", "{2B80A11E-3790-49D0-B52D-EBA3DD5372F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientTest", "ClientTest\ClientTest.csproj", "{B8885627-47B3-4AF3-BAAB-8F78C79B3743}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientTest", "ClientTest\ClientTest.csproj", "{B8885627-47B3-4AF3-BAAB-8F78C79B3743}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientWPF", "ClientWPF\ClientWPF.csproj", "{A886E476-FCC6-481A-8434-0A5715E4C907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B8885627-47B3-4AF3-BAAB-8F78C79B3743}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8885627-47B3-4AF3-BAAB-8F78C79B3743}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8885627-47B3-4AF3-BAAB-8F78C79B3743}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A886E476-FCC6-481A-8434-0A5715E4C907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A886E476-FCC6-481A-8434-0A5715E4C907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A886E476-FCC6-481A-8434-0A5715E4C907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A886E476-FCC6-481A-8434-0A5715E4C907}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

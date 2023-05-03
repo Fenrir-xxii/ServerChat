@@ -26,7 +26,7 @@ public class ChatClient
         _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
         _socket.Connect(_endPoint);
         var m = message.ToMessage();
-        _socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage()))); //error
+        _socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage()))); 
         var buffer = new byte[1024];
         var read = _socket.Receive(buffer);
         _socket.Close();
