@@ -26,19 +26,19 @@
                             <TextBlock>
                                 <TextBlock Height="35" FontSize="25" FontWeight="Bold">Login:</TextBlock>
                                 <TextBlock Width="45"></TextBlock>
-                                <TextBox Text="user1" Height="35" FontSize="25" Width="290"></TextBox>
+                                <TextBox Text="{Binding Path=Login}" Height="35" FontSize="25" Width="290" d:Text="login1"></TextBox>
                             </TextBlock>
                             <TextBlock>
                                 <TextBlock Height="35" FontSize="25" FontWeight="Bold">Password:</TextBlock>
                                 <TextBlock></TextBlock>
-                                <TextBox Text="pass12" Height="35" FontSize="25" Width="290"></TextBox>
+                                <TextBox Text="{Binding Path=Password}" Height="35" FontSize="25" Width="290" d:Text="pass12"></TextBox>
                             </TextBlock>
                             <TextBlock Height="35"></TextBlock>
-                            <Button Width="150" Height="40" FontSize="25" FontWeight="DemiBold" Background="DarkGray">Let me in</Button>
+                                <Button Width="150" Height="40" Command="{Binding Path=LoginCommand}" FontSize="25" FontWeight="DemiBold" Background="DarkGray">Let me in</Button>
                         </StackPanel>
                         </Border>
                         <StackPanel Grid.Column="1" Grid.Row="3">
-                            <TextBlock Height="25" FontSize="20" FontStyle="Italic" HorizontalAlignment="Center">{Info: success / wrong credentials}</TextBlock>
+                            <TextBlock Text="{Binding Path=InfoMessage}" Height="25" FontSize="20" FontStyle="Italic" HorizontalAlignment="Center" d:Text="Info: success / wrong credentials"></TextBlock>
                         </StackPanel>
                     </Grid>
                 </TabItem>
@@ -57,15 +57,15 @@
                         <TextBlock Grid.ColumnSpan="3" FontSize="30" HorizontalAlignment="Center" FontStyle="Oblique">R E G I S T R A T I O N</TextBlock>
                         <StackPanel Grid.Row="1" Grid.Column="1">
                             <TextBlock Height="30" FontSize="20" FontWeight="Bold">Login:</TextBlock>
-                            <TextBox Text="user1" Height="40" FontSize="30"></TextBox>
+                            <TextBox Text="{Binding Path=LoginRegister}" Height="40" FontSize="30" d:Text="user1"></TextBox>
                             <TextBlock Height="30" FontSize="20" FontWeight="Bold">Name:</TextBlock>
-                            <TextBox Text="Nick" Height="40" FontSize="30"></TextBox>
+                            <TextBox Text="{Binding Path=NameRegister}" Height="40" FontSize="30" d:Text="Nick"></TextBox>
                             <TextBlock Height="30" FontSize="20" FontWeight="Bold">Password:</TextBlock>
-                            <TextBox Text="PassWord123" Height="40" FontSize="30"></TextBox>
+                            <TextBox Text="{Binding Path=PasswordRegister, UpdateSourceTrigger=PropertyChanged}" Height="40" FontSize="30" d:Text="PassWord123"></TextBox>
                             <TextBlock Height="30" FontSize="20" FontWeight="Bold">Confirm password:</TextBlock>
-                            <TextBox Text="PassWord123" Height="40" FontSize="30"></TextBox>
+                            <TextBox Text="{Binding Path=PasswordConformationRegister, UpdateSourceTrigger=PropertyChanged}" Height="40" FontSize="30" d:Text="PassWord123"></TextBox>
                         </StackPanel>
-                        <Button Grid.Column="1" Grid.Row="2" Margin="100,10,100,10" FontSize="30" FontWeight="Bold" Background="DarkGray">Register</Button>
+                        <Button Grid.Column="1" Grid.Row="2" Command="{Binding Path=RegisterCommand}" Margin="100,10,100,10" FontSize="30" FontWeight="Bold" Background="DarkGray">Register</Button>
                     </Grid>
                 </TabItem>
             </TabControl>
