@@ -37,6 +37,10 @@ public class ChatClientWPF
         {
             case DataType.REGISTER_RESPONSE:
                 return JsonSerializer.Deserialize<RegisterResponse>(response.Data);
+            case DataType.LOGIN_RESPONSE:
+                return JsonSerializer.Deserialize<LoginResponse>(response.Data);
+            case DataType.ALLUSERS_RESPONSE:
+                return JsonSerializer.Deserialize<AllUsersResponse>(response.Data);
             default:
                 return null;
         }
@@ -45,5 +49,13 @@ public class ChatClientWPF
     public RegisterResponse Register(RegisterRequest request)
     {
         return Send(request) as RegisterResponse;
+    }
+    public LoginResponse Login(LoginRequest request)
+    {
+        return Send(request) as LoginResponse;
+    }
+    public AllUsersResponse AllUsers(AllUsersRequest request)
+    {
+        return Send(request) as AllUsersResponse;
     }
 }

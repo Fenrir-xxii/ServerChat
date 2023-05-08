@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="800">
     <Border BorderThickness="4" BorderBrush="DarkGray">
         <Grid>
             <TabControl>
@@ -22,23 +22,37 @@
                             <RowDefinition Height="30*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Border Grid.Row="1" Grid.Column="1" BorderThickness="5" BorderBrush="DarkGray">
-                        <StackPanel Margin="8">
-                            <TextBlock>
-                                <TextBlock Height="35" FontSize="25" FontWeight="Bold">Login:</TextBlock>
-                                <TextBlock Width="45"></TextBlock>
-                                <TextBox Text="{Binding Path=Login}" Height="35" FontSize="25" Width="290" d:Text="login1"></TextBox>
-                            </TextBlock>
-                            <TextBlock>
-                                <TextBlock Height="35" FontSize="25" FontWeight="Bold">Password:</TextBlock>
-                                <TextBlock></TextBlock>
-                                <TextBox Text="{Binding Path=Password}" Height="35" FontSize="25" Width="290" d:Text="pass12"></TextBox>
-                            </TextBlock>
-                            <TextBlock Height="35"></TextBlock>
-                                <Button Width="150" Height="40" Command="{Binding Path=LoginCommand}" FontSize="25" FontWeight="DemiBold" Background="DarkGray">Let me in</Button>
-                        </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90*"></ColumnDefinition>
+                                    <ColumnDefinition Width="10*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="33*"></RowDefinition>
+                                    <RowDefinition Height="33*"></RowDefinition>
+                                    <RowDefinition Height="33*"></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Margin="5">
+                                    <TextBlock Height="35" FontSize="25" FontWeight="Bold">Login:</TextBlock>
+                                    <TextBlock Width="45"></TextBlock>
+                                    <TextBox Text="{Binding Path=Login, UpdateSourceTrigger=PropertyChanged}" Height="35" FontSize="25" Width="245" d:Text="login1"></TextBox>
+                                </TextBlock >
+                                <TextBlock Grid.Row="1" Margin="5">
+                                    <TextBlock Height="35" FontSize="25" FontWeight="Bold">Password:</TextBlock>
+                                    <!--<TextBlock></TextBlock>-->
+                                    
+                                    <TextBox Name="visiblePass" Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Height="35" FontSize="25" Width="245" d:Text="pass12"></TextBox>
+                                    <PasswordBox  Name="hiddenPass" Height="35" FontSize="25" Width="245"></PasswordBox>
+                                    <!--<TextBox Name="visiblePass" Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Height="35" FontSize="25" Width="250" d:Text="pass12"></TextBox>-->
+                                    <!--<Button Name="ShowHide" Command ="{Binding Path=ShowHidePassword}" Content="Show" FontSize="11" Height="35" Width="35" Background="White"></Button>-->
+                                </TextBlock>
+                                <Button Grid.Column="1" Grid.Row="1" Name="ShowHide" Command ="{Binding Path=ShowHidePassword}" BorderBrush="DarkGray" Content="{Binding Path=ShowHideButtonText}" VerticalAlignment="Top" Margin="0,5,0,0" FontSize="11" Height="35" Width="35" Background="White"></Button>
+                                <Button Grid.Row="2" Grid.ColumnSpan="2" Width="150" Height="40" Command="{Binding Path=LoginCommand}" FontSize="25" FontWeight="DemiBold" Background="DarkGray">Let me in</Button>
+                            </Grid>
                         </Border>
                         <StackPanel Grid.Column="1" Grid.Row="3">
-                            <TextBlock Text="{Binding Path=InfoMessage}" Height="25" FontSize="20" FontStyle="Italic" HorizontalAlignment="Center" d:Text="Info: success / wrong credentials"></TextBlock>
+                            <TextBlock Text="{Binding Path=InfoMessage}" Height="30" FontSize="20" Foreground="Red" FontStyle="Italic" HorizontalAlignment="Center" d:Text="Info: error message"></TextBlock>
                         </StackPanel>
                     </Grid>
                 </TabItem>

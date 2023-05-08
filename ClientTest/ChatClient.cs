@@ -38,6 +38,8 @@ public class ChatClient
         {
             case DataType.REGISTER_RESPONSE:
                 return JsonSerializer.Deserialize<RegisterResponse>(response.Data);
+            case DataType.LOGIN_RESPONSE:
+                return JsonSerializer.Deserialize<LoginResponse>(response.Data);
             default:
                 return null;
         }
@@ -46,6 +48,10 @@ public class ChatClient
     public RegisterResponse Register(RegisterRequest request)
     {
         return Send(request) as RegisterResponse;
+    }
+    public LoginResponse Login(LoginRequest request)
+    {
+        return Send(request) as LoginResponse;
     }
 
 }

@@ -17,7 +17,7 @@ public class ChatServer
     {
         IPAddress ip = IPAddress.Parse(ipAddress);
         _endPoint = new IPEndPoint(ip, port);
-        _db = new ChatDbContext();
+        //_db = new ChatDbContext();
     }
     private Socket _socket;
     private IPEndPoint _endPoint;
@@ -41,36 +41,36 @@ public class ChatServer
             Console.WriteLine(e.Message);
         }
     }
-    private ChatDbContext _db;
-    public bool IsLoginFree(string login)
-    {
-        if (login == null)
-            return false;
-        var logins = _db.Users.ToList();
-        foreach(var l in logins)
-        {
-            if(l.Login.Equals(login)) 
-            {
-                return false;
-            }
-        };
-        return true;
-    }
-    public void RegisterUser(ChatUser user)
-    {
-        if (user == null) 
-            return;
-        var usr = new User()
-        {
-            Name = user.Name,
-            Login = user.Login,
-            IsOnline = true
-        };
-        _db.Users.Add(usr);
-        _db.SaveChanges();
-    }
-    public User? GetUserByLogin(string login)
-    {
-        return _db.Users.FirstOrDefault(x => x.Login.Equals(login));
-    }
+    //private ChatDbContext _db;
+    //public bool IsLoginFree(string login)
+    //{
+    //    if (login == null)
+    //        return false;
+    //    var logins = _db.Users.ToList();
+    //    foreach(var l in logins)
+    //    {
+    //        if(l.Login.Equals(login)) 
+    //        {
+    //            return false;
+    //        }
+    //    };
+    //    return true;
+    //}
+    //public void RegisterUser(ChatUser user)
+    //{
+    //    if (user == null) 
+    //        return;
+    //    var usr = new User()
+    //    {
+    //        Name = user.Name,
+    //        Login = user.Login,
+    //        IsOnline = true
+    //    };
+    //    _db.Users.Add(usr);
+    //    _db.SaveChanges();
+    //}
+    //public User? GetUserByLogin(string login)
+    //{
+    //    return _db.Users.FirstOrDefault(x => x.Login.Equals(login));
+    //}
 }

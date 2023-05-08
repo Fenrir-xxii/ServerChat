@@ -1,4 +1,5 @@
 ﻿using ClientWPF.ViewModels;
+using ConsoleApp20_ServerChat.Models_Server_Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,21 +12,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClientWPF
+namespace ClientWPF.Windows
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ChatWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ChatWindow : Window
     {
-        public MainWindow()
+        public ChatWindow(ChatClientWPF client, ChatUser user)
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
-            //GetPassword();
+            DataContext = new ChatViewModel(client, user);
         }
     }
 }

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp20-ServerChat", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientTest", "ClientTest\ClientTest.csproj", "{B8885627-47B3-4AF3-BAAB-8F78C79B3743}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientWPF", "ClientWPF\ClientWPF.csproj", "{A886E476-FCC6-481A-8434-0A5715E4C907}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientWPF", "ClientWPF\ClientWPF.csproj", "{A886E476-FCC6-481A-8434-0A5715E4C907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

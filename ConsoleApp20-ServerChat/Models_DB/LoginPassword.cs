@@ -10,6 +10,6 @@ namespace ConsoleApp20_ServerChat.Models_DB;
 public class LoginPassword
 {
     public int Id { get; set; }
-    public User User { get; set; }
+    public virtual User User { get; set; }
     public string HashPassword { get; set; }
 }

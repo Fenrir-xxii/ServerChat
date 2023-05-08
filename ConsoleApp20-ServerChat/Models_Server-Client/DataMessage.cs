@@ -8,7 +8,7 @@ namespace ConsoleApp20_ServerChat.Models_Server_Client;
 
 public enum DataType
 {
-    REGISTER_REQUEST = 0, REGISTER_RESPONSE, 
+    REGISTER_REQUEST = 0, REGISTER_RESPONSE, LOGIN_REQUEST, LOGIN_RESPONSE, ALLUSERS_REQUEST, ALLUSERS_RESPONSE
 }
 public class DataMessage
 {
