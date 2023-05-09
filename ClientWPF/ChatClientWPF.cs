@@ -26,7 +26,7 @@ public class ChatClientWPF
         _socket.Connect(_endPoint);
         var m = message.ToMessage();
         _socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage())));
-        var buffer = new byte[1024];
+        var buffer = new byte[2048];
         var read = _socket.Receive(buffer);
         _socket.Close();
 
@@ -41,6 +41,10 @@ public class ChatClientWPF
                 return JsonSerializer.Deserialize<LoginResponse>(response.Data);
             case DataType.ALLUSERS_RESPONSE:
                 return JsonSerializer.Deserialize<AllUsersResponse>(response.Data);
+            case DataType.SENDMESSAGE_RESPONSE:
+                return JsonSerializer.Deserialize<SendMessageResponse>(response.Data);
+            case DataType.GETMESSAGES_RESPONSE:
+                return JsonSerializer.Deserialize<GetMessagesResponse>(response.Data);
             default:
                 return null;
         }
@@ -57,5 +61,13 @@ public class ChatClientWPF
     public AllUsersResponse AllUsers(AllUsersRequest request)
     {
         return Send(request) as AllUsersResponse;
+    }
+    public SendMessageResponse SendMessage(SendMessageRequest request)
+    {
+        return Send(request) as SendMessageResponse;
+    }
+    public GetMessagesResponse GetMessages(GetMessagesRequest request)
+    {
+        return Send(request) as GetMessagesResponse;
     }
 }

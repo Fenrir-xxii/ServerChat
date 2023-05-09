@@ -40,12 +40,8 @@
                                 </TextBlock >
                                 <TextBlock Grid.Row="1" Margin="5">
                                     <TextBlock Height="35" FontSize="25" FontWeight="Bold">Password:</TextBlock>
-                                    <!--<TextBlock></TextBlock>-->
-                                    
                                     <TextBox Name="visiblePass" Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Height="35" FontSize="25" Width="245" d:Text="pass12"></TextBox>
                                     <PasswordBox  Name="hiddenPass" Height="35" FontSize="25" Width="245"></PasswordBox>
-                                    <!--<TextBox Name="visiblePass" Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Height="35" FontSize="25" Width="250" d:Text="pass12"></TextBox>-->
-                                    <!--<Button Name="ShowHide" Command ="{Binding Path=ShowHidePassword}" Content="Show" FontSize="11" Height="35" Width="35" Background="White"></Button>-->
                                 </TextBlock>
                                 <Button Grid.Column="1" Grid.Row="1" Name="ShowHide" Command ="{Binding Path=ShowHidePassword}" BorderBrush="DarkGray" Content="{Binding Path=ShowHideButtonText}" VerticalAlignment="Top" Margin="0,5,0,0" FontSize="11" Height="35" Width="35" Background="White"></Button>
                                 <Button Grid.Row="2" Grid.ColumnSpan="2" Width="150" Height="40" Command="{Binding Path=LoginCommand}" FontSize="25" FontWeight="DemiBold" Background="DarkGray">Let me in</Button>

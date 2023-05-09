@@ -41,11 +41,42 @@
                 </ListView.ItemTemplate>
             </ListView>
             </Border>
+            <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="1" Grid.Column="1">
+                <ListView ItemsSource="{Binding Path=ChatMessages}">
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=AmIReceiver}" Value="True">
+                                    <!--<Setter Property="Background" Value="Blue" />
+                                    <Setter Property="BorderBrush" Value="Blue" />-->
+                                    <Setter Property="HorizontalAlignment" Value="Right" ></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <WrapPanel>
+                                    <TextBlock Text="{Binding Path=TextMessage}" FontWeight="Bold"></TextBlock>
+                                    <!--<TextBlock Text="" FontStyle="Italic"></TextBlock>-->
+                                    <!--<TextBlock Text="{Binding Path=CreatedAt}" FontStyle="Italic"></TextBlock>-->
+                                </WrapPanel>
+                                <TextBlock FontSize="10" FontStyle="Italic">
+                                    <TextBlock Text="Sended: "></TextBlock>
+                                    <TextBlock Text="{Binding Path=CreatedAt}" FontStyle="Italic"></TextBlock>
+                                </TextBlock>
+                                
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
             <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="2" Grid.Column="1">
                 <TextBlock VerticalAlignment="Center">
-                    <TextBox Width="520" Height="30"></TextBox>
+                    <TextBox Width="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Button Height="30">Attach</Button>
-                    <Button Height="30">Send</Button>
+                    <Button Height="30" Command="{Binding Path=SendCommand}">Send</Button>
                 </TextBlock>
             </Border>
         </Grid>

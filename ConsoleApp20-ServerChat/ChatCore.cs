@@ -3,6 +3,7 @@ using Azure.Core;
 using ConsoleApp20_ServerChat.Models;
 using ConsoleApp20_ServerChat.Models_DB;
 using ConsoleApp20_ServerChat.Models_Server_Client;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -199,6 +200,45 @@ public class ChatCore
         }
 
     }
+    private IDataMessage HandleData(SendMessageRequest request)
+    {
+        var sender = _db.Users.FirstOrDefault(x => x.Id== request.Sender.Id);
+        var receiver = _db.Users.FirstOrDefault(x => x.Id == request.Receiver.Id);
+        var message = new Message
+        {
+            Sender = sender,
+            Receiver = receiver,
+            TextContent = request.TextMessage,
+            CreatedAt = DateTime.Now,
+        };
+        _db.Messages.Add(message);
+        _db.SaveChanges();
+
+        return new SendMessageResponse()
+        {
+            Error = null,
+            Success = true,
+            Id = message.Id
+        };
+    }
+    private IDataMessage HandleData(GetMessagesRequest request)
+    {
+        return new GetMessagesResponse()
+        {
+            Messages = _db.Messages.Include(x => x.Sender).Include(x => x.Receiver)
+            .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
+            .Where(x => x.Id > request.IdAfter)
+            .OrderBy(x => x.Id)
+            .Select(m => new ChatMessage
+            {
+                Id = m.Id,
+                TextMessage = m.TextContent,
+                CreatedAt = m.CreatedAt,
+                Sender = GetChatUserFromDbUser(m.Sender),
+                Receiver = GetChatUserFromDbUser(m.Receiver)
+            }).ToList()
+        };
+    }
     public void Handle(Socket socket)
     {
         var buffer = new byte[1024];
@@ -216,6 +256,12 @@ public class ChatCore
                 break;
             case DataType.ALLUSERS_REQUEST:
                 Send(socket, HandleData(GetModel<AllUsersRequest>(request.Data)));
+                break;
+            case DataType.SENDMESSAGE_REQUEST:
+                Send(socket, HandleData(GetModel<SendMessageRequest>(request.Data)));
+                break;
+            case DataType.GETMESSAGES_REQUEST:
+                Send(socket, HandleData(GetModel<GetMessagesRequest>(request.Data)));
                 break;
             default:
                 break;
@@ -253,6 +299,10 @@ public class ChatCore
     public User? GetUserByLogin(string login)
     {
         return _db.Users.FirstOrDefault(x => x.Login.Equals(login));
+    }
+    public static ChatUser? GetChatUserFromDbUser(User user)
+    {
+        return new ChatUser { Id = user.Id, Login = user.Login, Name=user.Name };
     }
     public string GetPasswordFromLogin(string login)  //REDO to hash
     {
