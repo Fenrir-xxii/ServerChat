@@ -47,24 +47,34 @@
                         <Style TargetType="ListViewItem">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=AmIReceiver}" Value="True">
-                                    <!--<Setter Property="Background" Value="Blue" />
-                                    <Setter Property="BorderBrush" Value="Blue" />-->
+                                    <Setter Property="Foreground" Value="Blue" />
+                                    <!--<Setter Property="Background" Value="Brown" />-->
+                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
+                                    <Setter Property="HorizontalAlignment" Value="Left" ></Setter>
+                                    <!--<Setter Property="HorizontalContentAlignment" Value="Right"></Setter>-->
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=AmIReceiver}" Value="False">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
                                     <Setter Property="HorizontalAlignment" Value="Right" ></Setter>
+                                    <!--<Setter Property="HorizontalContentAlignment" Value="Right"></Setter>-->
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </ListView.Resources>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel>
-                                <WrapPanel>
-                                    <TextBlock Text="{Binding Path=TextMessage}" FontWeight="Bold"></TextBlock>
+                            <StackPanel HorizontalAlignment="Right">
+                                <WrapPanel HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Path=TextMessage}" FontWeight="Bold" FontSize="16"></TextBlock>
                                     <!--<TextBlock Text="" FontStyle="Italic"></TextBlock>-->
                                     <!--<TextBlock Text="{Binding Path=CreatedAt}" FontStyle="Italic"></TextBlock>-->
                                 </WrapPanel>
                                 <TextBlock FontSize="10" FontStyle="Italic">
-                                    <TextBlock Text="Sended: "></TextBlock>
-                                    <TextBlock Text="{Binding Path=CreatedAt}" FontStyle="Italic"></TextBlock>
+                                    <!--<TextBlock Text="Sended: "></TextBlock>-->
+                                    <TextBlock Text="{Binding Path=InfoText}"></TextBlock>
+                                    <TextBlock Text=": "></TextBlock>
+                                    <TextBlock Text="{Binding Path=CreatedAt, StringFormat='dd.MM.yyyy hh:mm'}" FontStyle="Italic"></TextBlock>
                                 </TextBlock>
                                 
                             </StackPanel>
@@ -74,7 +84,7 @@
             </Border>
             <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="2" Grid.Column="1">
                 <TextBlock VerticalAlignment="Center">
-                    <TextBox Width="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox Width="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16"></TextBox>
                     <Button Height="30">Attach</Button>
                     <Button Height="30" Command="{Binding Path=SendCommand}">Send</Button>
                 </TextBlock>

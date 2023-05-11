@@ -29,11 +29,11 @@ public class ChatServer
         try
         {
             _socket.Bind(_endPoint);
-            _socket.Listen(1000);
+            _socket.Listen(100);
             while (true)
             {
                 Task.Run(() => Worker(_socket.Accept()));
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
         catch (Exception e)

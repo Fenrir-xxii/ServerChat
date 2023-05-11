@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
+using System.Threading;
 
 namespace ClientWPF.ViewModels;
 
@@ -32,7 +33,8 @@ public class ChatViewModel : NotifyPropertyChangedBase
             OnPropertyChanged(nameof(Users));
         }
         _chatMessages = new List<ChatMessageModel>();
-        GetMessages();
+        //GetMessages();
+        UpdateMessagesTask();
         _textMessage = String.Empty;
     }
     private ChatClientWPF _client;
@@ -95,7 +97,9 @@ public class ChatViewModel : NotifyPropertyChangedBase
         {
             if (response.Success)
             {
-                MessageBox.Show("Success", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Success", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                _textMessage = String.Empty;
+                OnPropertyChanged(nameof(TextMessage));
                 //GetMessages();
             }
             else
@@ -109,15 +113,44 @@ public class ChatViewModel : NotifyPropertyChangedBase
         var request = new GetMessagesRequest
         {
             Questioner = _user,
-            IdAfter = 0
+            IdAfter = GetLastMessageId()
         };
         var response = _client.GetMessages(request);
         
         response.Messages.ForEach(m =>
         {
-            _chatMessages.Add(new ChatMessageModel { Id = m.Id, Sender = m.Sender, Receiver = m.Receiver, TextMessage = m.TextMessage, CreatedAt = m.CreatedAt, AmIReceiver = (m.Receiver.Id==_user.Id) });
+            _chatMessages.Add(new ChatMessageModel { Id = m.Id, Sender = m.Sender, Receiver = m.Receiver, TextMessage = m.TextMessage, CreatedAt = m.CreatedAt, AmIReceiver = (m.Receiver.Id==_user.Id), InfoText = (m.Receiver.Id == _user.Id ? "received":"sended") });
         });
         OnPropertyChanged(nameof(ChatMessages));
+    }
+    public void UpdateMessagesTask()
+    {
+        Task t = new Task(() =>
+        {
+            while(true)
+            {
+                GetMessages();
+                Thread.Sleep(1500);
+            }
+        });
+        t.Start();
+    }
+    public int GetLastMessageId()
+    {
+        int lastMessageId = 0;
+        if(_chatMessages.Count ==0)
+        {
+            return 0;
+        }
+        _chatMessages.ForEach(m =>
+        {
+            int last = m.Id;
+            if(last> lastMessageId)
+            {
+                lastMessageId = last;
+            }
+        });
+        return lastMessageId;
     }
     private List<ChatMessageModel> _chatMessages;
     public ObservableCollection<ChatMessageModel> ChatMessages

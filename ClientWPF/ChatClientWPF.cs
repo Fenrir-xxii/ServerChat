@@ -26,7 +26,7 @@ public class ChatClientWPF
         _socket.Connect(_endPoint);
         var m = message.ToMessage();
         _socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage())));
-        var buffer = new byte[2048];
+        var buffer = new byte[20048];
         var read = _socket.Receive(buffer);
         _socket.Close();
 

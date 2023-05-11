@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -122,9 +123,18 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
             {
                 // new window
                 MessageBox.Show($"Welcome {response.User.Name}.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id=response.User.Id});
                 Application.Current.MainWindow.Hide();
-                window.ShowDialog();
+                Thread t = new Thread(() =>
+                {
+                    var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
+                    //Application.Current.MainWindow.Hide();
+                    window.ShowDialog();
+                });
+                t.SetApartmentState(ApartmentState.STA);
+                t.Start();
+                //var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id=response.User.Id});
+                //Application.Current.MainWindow.Hide();
+                //window.ShowDialog();
             }
             else
             {

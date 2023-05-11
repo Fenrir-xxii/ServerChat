@@ -15,4 +15,5 @@ public class ChatMessageModel
     public ChatUser Receiver { get; set; }
     public DateTime CreatedAt { get; set; }
     public bool AmIReceiver { get; set; }
+    public string InfoText { get; set; }    
 }
