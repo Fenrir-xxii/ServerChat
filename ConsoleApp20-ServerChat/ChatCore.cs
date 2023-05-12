@@ -41,7 +41,7 @@ public class ChatCore
             };
             try
             {
-                RegisterUser(user, request.Password);
+                RegisterUser(user, BCrypt.Net.BCrypt.HashPassword(request.Password));
                 var userFromDb = GetUserByLogin(request.Login);
                 if (userFromDb != null)
                 {
@@ -52,7 +52,8 @@ public class ChatCore
                         {
                             Id = userFromDb.Id,
                             Login = userFromDb.Login,
-                            Name = userFromDb.Name
+                            Name = userFromDb.Name,
+                            IsOnline = false
                         },
                     };
                     return response;
@@ -99,10 +100,11 @@ public class ChatCore
             {
                 var userFromDb = GetUserByLogin(request.Login);
                 var userFromDbPassword = GetPasswordFromLogin(userFromDb.Login.ToString());
-                var pass = request.Password;
+                //var pass = request.Password;
+               
                 if (userFromDb != null)
                 {
-                    if(userFromDbPassword.Equals(pass))
+                    if (BCrypt.Net.BCrypt.Verify(request.Password, userFromDbPassword))
                     {
                         var response = new LoginResponse()
                         {
@@ -111,9 +113,13 @@ public class ChatCore
                             {
                                 Id = userFromDb.Id,
                                 Login = userFromDb.Login,
-                                Name = userFromDb.Name
+                                Name = userFromDb.Name,
+                                IsOnline = true
                             },
                         };
+                        userFromDb.IsOnline = true;
+                        _db.Update(userFromDb);
+                        _db.SaveChanges();
                         return response;
                     }
                     else
@@ -174,7 +180,8 @@ public class ChatCore
                 {
                     Id = u.Id,
                     Name = u.Name,
-                    Login = u.Login
+                    Login = u.Login,
+                    IsOnline = u.IsOnline,
                 };
                 res.Add(user);
             });
@@ -225,7 +232,7 @@ public class ChatCore
     {
         return new GetMessagesResponse()
         {
-            Messages = _db.Messages.Include(x => x.Sender).Include(x => x.Receiver)
+            Messages = _db.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver)
             .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
             .Where(x => x.Id > request.IdAfter)
             .OrderBy(x => x.Id)
@@ -282,7 +289,7 @@ public class ChatCore
         };
         return true;
     }
-    public void RegisterUser(ChatUser user, string password)
+    public void RegisterUser(ChatUser user, string hashPassword)
     {
         if (user == null)
             return;
@@ -290,10 +297,10 @@ public class ChatCore
         {
             Name = user.Name,
             Login = user.Login,
-            IsOnline = true
+            IsOnline = false
         };
         _db.Users.Add(usr);
-        _db.LoginPasswords.Add(new LoginPassword { User = usr, HashPassword = password });
+        _db.LoginPasswords.Add(new LoginPassword { User = usr, HashPassword = hashPassword });
         _db.SaveChanges();
     }
     public User? GetUserByLogin(string login)

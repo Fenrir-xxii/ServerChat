@@ -22,13 +22,20 @@ public class ChatClientWPF
 
     private Object? Send(IDataMessage message)
     {
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-        _socket.Connect(_endPoint);
+        //_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+        //_socket.Connect(_endPoint);
+        //var m = message.ToMessage();
+        //_socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage())));
+        //var buffer = new byte[20048];
+        //var read = _socket.Receive(buffer);
+        //_socket.Close();
+        var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+        socket.Connect(_endPoint);
         var m = message.ToMessage();
-        _socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage())));
+        socket.Send(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message.ToMessage())));
         var buffer = new byte[20048];
-        var read = _socket.Receive(buffer);
-        _socket.Close();
+        var read = socket.Receive(buffer);
+        socket.Close();
 
         var incoming = Encoding.UTF8.GetString(buffer, 0, read);
         var response = JsonSerializer.Deserialize<DataMessage>(incoming);

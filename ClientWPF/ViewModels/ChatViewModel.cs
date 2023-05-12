@@ -21,20 +21,23 @@ public class ChatViewModel : NotifyPropertyChangedBase
         _client = client;
         _user = user;
         _users = new List<ChatUser> ();
+        _lastSelectedUserId = -1;
         //request for users and messages from db
-        var request = new AllUsersRequest
-        {
-            Login = _user.Login,
-        };
-        var response = _client.AllUsers(request);
-        if (response.Success)
-        {
-            _users = response.AllUsers;
-            OnPropertyChanged(nameof(Users));
-        }
+        //var request = new AllUsersRequest
+        //{
+        //    Login = _user.Login,
+        //};
+        //var response = _client.AllUsers(request);
+        //if (response.Success)
+        //{
+        //    _users = response.AllUsers;
+        //    OnPropertyChanged(nameof(Users));
+        //}
+        GetUsers();
         _chatMessages = new List<ChatMessageModel>();
         //GetMessages();
         UpdateMessagesTask();
+        UpdateUserStatus();
         _textMessage = String.Empty;
     }
     private ChatClientWPF _client;
@@ -70,10 +73,12 @@ public class ChatViewModel : NotifyPropertyChangedBase
         set
         {
             _selectedUser = value;
+            _lastSelectedUserId = _selectedUser.Id;
             OnPropertyChanged(nameof(SelectedUser));
             OnPropertyChanged(nameof(ChatMessages));
         }
     }
+    private int _lastSelectedUserId;
     private string _textMessage;
     public string TextMessage
     {
@@ -108,6 +113,19 @@ public class ChatViewModel : NotifyPropertyChangedBase
             }
         }
     }, x => _textMessage.Length > 0 && _selectedUser !=null);
+    public void GetUsers()
+    {
+        var request = new AllUsersRequest
+        {
+            Login = _user.Login,
+        };
+        var response = _client.AllUsers(request);
+        if (response.Success)
+        {
+            _users = response.AllUsers;
+            OnPropertyChanged(nameof(Users));
+        }
+    }
     public void GetMessages()
     {
         var request = new GetMessagesRequest
@@ -131,6 +149,36 @@ public class ChatViewModel : NotifyPropertyChangedBase
             {
                 GetMessages();
                 Thread.Sleep(1500);
+            }
+        });
+        t.Start();
+    }
+    public void UpdateUserStatus()
+    {
+        Task t = new Task(() =>
+        {
+            while (true)
+            {
+                var request = new AllUsersRequest
+                {
+                    Login = _user.Login,
+                };
+                var response = _client.AllUsers(request);
+                if (response.Success)
+                {
+                    var updatedUsers = response.AllUsers;
+                    _users.ForEach(user =>
+                    {
+                        var u = updatedUsers.FirstOrDefault(x => x.Id == user.Id);
+                        if (user.IsOnline != u.IsOnline)
+                        {
+                            _users = updatedUsers;
+                            OnPropertyChanged(nameof(Users));
+                            return;
+                        }
+                    });
+                }
+                Thread.Sleep(2500);
             }
         });
         t.Start();

@@ -29,7 +29,22 @@
             </Border>
             <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="1" Grid.RowSpan="2">
             <ListView ItemsSource="{Binding Path=Users}" SelectedItem="{Binding Path=SelectedUser}">
-                <ListView.ItemTemplate>
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsOnline}" Value="True">
+                                    <Setter Property="Foreground" Value="Green" />
+                                    <!--<Setter Property="Background" Value="Green" />-->
+                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=IsOnline}" Value="False">
+                                    <Setter Property="Foreground" Value="DimGray" />
+                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.ItemTemplate>
                     <DataTemplate>
                         <WrapPanel>
                             <TextBlock Text="{Binding Path=Login}" FontWeight="Bold"></TextBlock>
@@ -41,6 +56,7 @@
                 </ListView.ItemTemplate>
             </ListView>
             </Border>
+            <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="0" Grid.Column="1"></Border>
             <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="1" Grid.Column="1">
                 <ListView ItemsSource="{Binding Path=ChatMessages}">
                     <ListView.Resources>
