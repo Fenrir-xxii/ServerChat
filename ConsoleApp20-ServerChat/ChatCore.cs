@@ -211,7 +211,7 @@ public class ChatCore
     {
         var sender = _db.Users.FirstOrDefault(x => x.Id== request.Sender.Id);
         var receiver = _db.Users.FirstOrDefault(x => x.Id == request.Receiver.Id);
-        var message = new Message
+        var message = new Models_DB.Message
         {
             Sender = sender,
             Receiver = receiver,
@@ -230,9 +230,10 @@ public class ChatCore
     }
     private IDataMessage HandleData(GetMessagesRequest request)
     {
+        var bdTemp = new ChatDbContext();
         return new GetMessagesResponse()
         {
-            Messages = _db.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver)
+            Messages = bdTemp.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver)
             .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
             .Where(x => x.Id > request.IdAfter)
             .OrderBy(x => x.Id)
@@ -245,6 +246,29 @@ public class ChatCore
                 Receiver = GetChatUserFromDbUser(m.Receiver)
             }).ToList()
         };
+    }
+    private IDataMessage HandleData(LogoutRequest request)
+    {
+        try
+        {
+            var user = GetUserByLogin(request.User.Login);
+            user.IsOnline = false;
+            _db.Update(user);
+            _db.SaveChanges();
+            return new LogoutResponse()
+            {
+                Error = null,
+                Success = true
+            };
+        }
+        catch(Exception ex)
+        {
+            return new LogoutResponse()
+            {
+                Error = ex.Message,
+                Success = false
+            };
+        }
     }
     public void Handle(Socket socket)
     {
@@ -269,6 +293,9 @@ public class ChatCore
                 break;
             case DataType.GETMESSAGES_REQUEST:
                 Send(socket, HandleData(GetModel<GetMessagesRequest>(request.Data)));
+                break;
+            case DataType.LOGOUT_REQUEST:
+                Send(socket, HandleData(GetModel<LogoutRequest>(request.Data)));
                 break;
             default:
                 break;

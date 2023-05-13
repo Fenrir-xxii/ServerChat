@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows;
 using System.Threading;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace ClientWPF.ViewModels;
 
@@ -21,6 +25,8 @@ public class ChatViewModel : NotifyPropertyChangedBase
         _client = client;
         _user = user;
         _users = new List<ChatUser> ();
+        _attachedImagePath = String.Empty;
+        //_run = run;
         _lastSelectedUserId = -1;
         //request for users and messages from db
         //var request = new AllUsersRequest
@@ -42,6 +48,7 @@ public class ChatViewModel : NotifyPropertyChangedBase
     }
     private ChatClientWPF _client;
     private ChatUser _user;
+    //private bool _run;
     public string Login
     {
         get => _user.Login;
@@ -143,7 +150,7 @@ public class ChatViewModel : NotifyPropertyChangedBase
     }
     public void UpdateMessagesTask()
     {
-        Task t = new Task(() =>
+        Task t = new Task (() =>
         {
             while(true)
             {
@@ -213,4 +220,48 @@ public class ChatViewModel : NotifyPropertyChangedBase
             return collection;
         }
     }
+    public ICommand LogoutCommand => new RelayCommand(x =>
+    {
+        //REDO
+        var request = new LogoutRequest
+        {
+            User = _user
+        };
+        var response = _client.Logout(request);
+        if (!response.Success)
+        {
+            MessageBox.Show("Something went wrong!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        System.Windows.Application.Current.Dispatcher.Invoke(
+        System.Windows.Threading.DispatcherPriority.Normal, (Action)delegate
+        {
+            for (int intCounter = App.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
+            {
+                if (!App.Current.Windows[intCounter].Equals(App.Current.MainWindow))
+                {
+                    App.Current.Windows[intCounter].Dispatcher.Invoke(() =>
+                    {
+                        App.Current.Windows[intCounter].Close();
+                    });
+                }
+            }
+            Application.Current.MainWindow.Show();
+        });
+       
+        //REQUEST TO SERVER FOR OFFLINE USER
+    }, x => true);
+    private string _attachedImagePath;
+    public ICommand AttachFileCommand => new RelayCommand(x =>
+    {
+        var dialog = new OpenFileDialog();
+
+        dialog.Title = "Open Image";
+        dialog.Filter = "All Images|*.BMP;*.DIB;*.RLE;*.JPG;*.JPEG;*.JPE;*.JFIF;*.GIF;*.TIF;*.TIFF;*.PNG";
+
+        if (dialog.ShowDialog() == true)
+        {
+            _attachedImagePath = dialog.FileName;
+        }
+
+    }, x => true);
 }

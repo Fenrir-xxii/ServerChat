@@ -52,6 +52,8 @@ public class ChatClientWPF
                 return JsonSerializer.Deserialize<SendMessageResponse>(response.Data);
             case DataType.GETMESSAGES_RESPONSE:
                 return JsonSerializer.Deserialize<GetMessagesResponse>(response.Data);
+            case DataType.LOGOUT_RESPONSE:
+                return JsonSerializer.Deserialize<LogoutResponse>(response.Data);
             default:
                 return null;
         }
@@ -76,5 +78,9 @@ public class ChatClientWPF
     public GetMessagesResponse GetMessages(GetMessagesRequest request)
     {
         return Send(request) as GetMessagesResponse;
+    }
+    public LogoutResponse Logout(LogoutRequest request)
+    {
+        return Send(request) as LogoutResponse;
     }
 }

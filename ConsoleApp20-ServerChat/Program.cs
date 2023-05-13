@@ -15,7 +15,24 @@ using System.Text.Json;
 //    context.SaveChanges();
 //}
 
+var imageServer = new ImageServer("127.0.0.1", 4444);
+imageServer.Worker = (s) =>
+{
+    var core = new ImageServerCore();
+    core.Handle(s);
+    s.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+    s.Close();
 
+};
+Task.Run(() =>
+{
+    imageServer.Listen();
+    while(true)
+    {
+        Task.Run(() => imageServer.Worker(imageServer._socket.Accept()));
+        Thread.Sleep(1000);
+    }
+});
 
 var server = new ChatServer("127.0.0.1", 5555);
 var core = new ChatCore();

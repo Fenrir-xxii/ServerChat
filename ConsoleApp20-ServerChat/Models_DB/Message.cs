@@ -9,9 +9,14 @@ namespace ConsoleApp20_ServerChat.Models_DB;
 
 public class Message
 {
+    public Message()
+    {
+        Images = new HashSet<Image>();
+    }
     public int Id { get; set; }
     public virtual User Sender { get; set; }
     public virtual User Receiver { get; set; }
     public string TextContent { get; set; }
     public DateTime CreatedAt { get; set; }
+    public virtual ICollection<Image> Images { get; set; }
 }

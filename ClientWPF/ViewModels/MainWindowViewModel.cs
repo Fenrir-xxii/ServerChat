@@ -124,14 +124,48 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
                 // new window
                 MessageBox.Show($"Welcome {response.User.Name}.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 Application.Current.MainWindow.Hide();
-                Thread t = new Thread(() =>
-                {
-                    var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
-                    //Application.Current.MainWindow.Hide();
-                    window.ShowDialog();
-                });
-                t.SetApartmentState(ApartmentState.STA);
-                t.Start();
+                _login = String.Empty;
+                _password = String.Empty;
+                Password = String.Empty;    
+                OnPropertyChanged(nameof(Login));
+                OnPropertyChanged(nameof(Password));
+                OnPropertyChanged(nameof(IsPasswordHidden));
+                //bool run = true;
+                var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
+                window.ShowDialog();
+
+                //Thread t = new Thread(() =>
+                //{
+                //    var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
+                //    //Application.Current.MainWindow.Hide();
+                //    window.ShowDialog();
+                //});
+                //t.SetApartmentState(ApartmentState.STA);
+                //t.Start();
+                //while (true)
+                //{
+                //    if(!run)
+                //    {
+                //        t.Abort();
+                //        return;
+                //    }
+                //}
+                //t.Abort();
+                //t.Join();
+                //if (!run)
+                //{
+                //    t.Abort();
+                //}
+
+                //Task tsk = new Task(() =>
+                //{
+                //    var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
+                //    //Application.Current.MainWindow.Hide();
+                //    window.ShowDialog();
+                //});
+                ////tsk.SetApartmentState(ApartmentState.STA);
+                //tsk.Start();
+
                 //var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id=response.User.Id});
                 //Application.Current.MainWindow.Hide();
                 //window.ShowDialog();
@@ -216,5 +250,4 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
         OnPropertyChanged(nameof(PasswordConformationRegister));
 
     }, x => _loginRegister.Length > 0 && _nameRegister.Length > 0 && _passwordRegister.Length>0 && _passwordRegister.Equals(_passwordConformationRegister));
-
 }
