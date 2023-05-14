@@ -113,16 +113,20 @@ public class ImageServerCore
         switch (requestType)
         {
             case 0: //GET
+                Console.WriteLine("download");
                 var buffer = new byte[1024];
                 int read = socket.Receive(buffer);
                 filename = Encoding.UTF8.GetString(buffer, 0, read);
+                Console.WriteLine(filename);
                 SendFile(socket, GetFullFileName(filename));
+                Console.WriteLine("downloading complete");
                 break ;
             case 1: //UPLOAD
                 Console.WriteLine("upload");
                 filename = GenerateRandomName(20) + ".jpeg";
                 ReceiveFile(socket, GetFullFileName(filename));
                 socket.Send(Encoding.UTF8.GetBytes(filename));
+                Console.WriteLine("uploading complete");
                 break;
             default:
                 break;

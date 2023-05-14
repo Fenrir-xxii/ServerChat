@@ -9,9 +9,14 @@ namespace ConsoleApp20_ServerChat.Models_Server_Client;
 
 public class SendMessageRequest : IDataMessage
 {
+    public SendMessageRequest()
+    {
+        Images = new ();
+    }
     public string TextMessage { get; set; }
     public ChatUser Sender { get; set; }
     public ChatUser Receiver { get; set; }
+    public List<ChatMessageImage> Images { get; set; }
 
     public DataMessage ToMessage()
     {

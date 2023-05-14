@@ -11,9 +11,11 @@ using ConsoleApp20_ServerChat.Models_Server_Client;
 var client = new ChatClient("127.0.0.1", 5555);
 
 var imageClient = new ImageClient("127.0.0.1", 4444);
-var filename = imageClient.UploadImage("C:\\Users\\user\\source\\repos\\ConsoleApp20-ServerChat\\ConsoleApp20-ServerChat\\mem.jpg");
+//var filename = imageClient.UploadImage("C:\\Users\\user\\source\\repos\\ConsoleApp20-ServerChat\\ConsoleApp20-ServerChat\\mem.jpg");
 
-Console.WriteLine(filename);
+//Console.WriteLine(filename);
+var filename = "filename.jpg";
+//imageClient.DownloadImage(filename);
 
 
 

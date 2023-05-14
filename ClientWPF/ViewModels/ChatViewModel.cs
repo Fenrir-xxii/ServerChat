@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using System.Windows.Data;
 
 namespace ClientWPF.ViewModels;
 
@@ -24,8 +25,11 @@ public class ChatViewModel : NotifyPropertyChangedBase
     {
         _client = client;
         _user = user;
+        _imageClient = new ImageClient("127.0.0.1", 4444);
         _users = new List<ChatUser> ();
+        _images = new List<string> ();
         _attachedImagePath = String.Empty;
+        _isAttached = false;
         //_run = run;
         _lastSelectedUserId = -1;
         //request for users and messages from db
@@ -48,6 +52,7 @@ public class ChatViewModel : NotifyPropertyChangedBase
     }
     private ChatClientWPF _client;
     private ChatUser _user;
+    private ImageClient _imageClient;
     //private bool _run;
     public string Login
     {
@@ -80,7 +85,10 @@ public class ChatViewModel : NotifyPropertyChangedBase
         set
         {
             _selectedUser = value;
-            _lastSelectedUserId = _selectedUser.Id;
+            if(_selectedUser!=null)
+            {
+                _lastSelectedUserId = _selectedUser.Id;
+            }
             OnPropertyChanged(nameof(SelectedUser));
             OnPropertyChanged(nameof(ChatMessages));
         }
@@ -98,11 +106,18 @@ public class ChatViewModel : NotifyPropertyChangedBase
     }
     public ICommand SendCommand => new RelayCommand(x =>
     {
+        var chatImages = new List<ChatMessageImage>();
+        _images.ForEach(i =>
+        {
+            var remoteFilename = _imageClient.UploadImage(i);
+            chatImages.Add(new ChatMessageImage() { Filename = remoteFilename });
+        });
         var request = new SendMessageRequest
         {
             TextMessage = _textMessage,
             Sender = _user,
-            Receiver = _selectedUser
+            Receiver = _selectedUser,
+            Images = chatImages
         };
         var response = _client.SendMessage(request);
         if (response != null)
@@ -119,7 +134,7 @@ public class ChatViewModel : NotifyPropertyChangedBase
                 MessageBox.Show($"Error.\n{response.Error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-    }, x => _textMessage.Length > 0 && _selectedUser !=null);
+    }, x => (_textMessage.Length > 0  || _images.Count>0) && _selectedUser !=null);
     public void GetUsers()
     {
         var request = new AllUsersRequest
@@ -144,8 +159,24 @@ public class ChatViewModel : NotifyPropertyChangedBase
         
         response.Messages.ForEach(m =>
         {
-            _chatMessages.Add(new ChatMessageModel { Id = m.Id, Sender = m.Sender, Receiver = m.Receiver, TextMessage = m.TextMessage, CreatedAt = m.CreatedAt, AmIReceiver = (m.Receiver.Id==_user.Id), InfoText = (m.Receiver.Id == _user.Id ? "received":"sended") });
+            m.Images.ForEach(image =>
+            {
+                _imageClient.DownloadImage(image.Filename);
+                image.Filename = _imageClient.GetFullFileName(image.Filename);
+            });
+            _chatMessages.Add(new ChatMessageModel 
+            { 
+                Id = m.Id, 
+                Sender = m.Sender, 
+                Receiver = m.Receiver, 
+                TextMessage = m.TextMessage, 
+                CreatedAt = m.CreatedAt, 
+                AmIReceiver = (m.Receiver.Id==_user.Id), 
+                InfoText = (m.Receiver.Id == _user.Id ? "received":"sended") ,
+                Images = m.Images
+            });
         });
+
         OnPropertyChanged(nameof(ChatMessages));
     }
     public void UpdateMessagesTask()
@@ -251,17 +282,47 @@ public class ChatViewModel : NotifyPropertyChangedBase
         //REQUEST TO SERVER FOR OFFLINE USER
     }, x => true);
     private string _attachedImagePath;
+    private List<string> _images;
     public ICommand AttachFileCommand => new RelayCommand(x =>
     {
+        _images.Clear();
         var dialog = new OpenFileDialog();
 
         dialog.Title = "Open Image";
         dialog.Filter = "All Images|*.BMP;*.DIB;*.RLE;*.JPG;*.JPEG;*.JPE;*.JFIF;*.GIF;*.TIF;*.TIFF;*.PNG";
-
+        dialog.Multiselect = true;
         if (dialog.ShowDialog() == true)
         {
+            _images.AddRange(dialog.FileNames);
             _attachedImagePath = dialog.FileName;
+            _isAttached = true;
+            //System.Windows.Application.Current.Dispatcher.Invoke(
+            // System.Windows.Threading.DispatcherPriority.Normal, (Action)delegate
+            //{
+            //    for (int intCounter = App.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
+            //    {
+            //        if (!App.Current.Windows[intCounter].Equals(App.Current.MainWindow))
+            //        {
+            //            App.Current.Windows[intCounter].Dispatcher.Invoke(() =>
+            //            {
+            //                (App.Current.Windows[intCounter] as ChatWindow).AttachCheck.Visibility = Visibility.Visible;
+            //            });
+            //        }
+            //    }
+            //    //(App.Current.Windows[1] as ChatWindow).AttachCheck.Visibility = Visibility.Visible;
+            //});
+            //OnPropertyChanged(nameof(IsAttached));
         }
 
     }, x => true);
+    private bool _isAttached;
+    public bool IsAttached
+    {
+        get => _isAttached;
+        set
+        {
+            _isAttached = value;
+            OnPropertyChanged(nameof(IsAttached));
+        }
+    }
 }

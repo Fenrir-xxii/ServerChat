@@ -107,6 +107,7 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
         }
     }
     private ChatClientWPF _client;
+    
     public ICommand LoginCommand => new RelayCommand(x =>
     {
         InfoMessage = String.Empty;

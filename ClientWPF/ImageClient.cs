@@ -29,13 +29,13 @@ public class ImageClient
         var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
         socket.Connect(_endPoint);
 
-        _socket.Send(BitConverter.GetBytes(1));
+        socket.Send(BitConverter.GetBytes(1));
         SendFile(socket, filename);
 
         var buffer = new byte[1024];
         int read = socket.Receive(buffer);
         filename = Encoding.UTF8.GetString(buffer, 0, read);
-        _socket.Close();
+        socket.Close();
         return filename;
     }
 
@@ -49,6 +49,46 @@ public class ImageClient
             socket.Send(BitConverter.GetBytes(ms.Length));
             socket.Send(ms.ToArray());
         }
+    }
+
+    protected void ReceiveFile(Socket socket, string filename)
+    {
+        byte[] fileSizeBytes = new byte[sizeof(ulong)];
+        socket.Receive(fileSizeBytes);
+        long fileSize = BitConverter.ToInt64(fileSizeBytes, 0);
+
+        byte[] imageData = new byte[fileSize];  //error  Array dimensions exceeded supported range
+        socket.Receive(imageData);
+
+        Bitmap bitmap;
+
+        using (MemoryStream stream = new MemoryStream(imageData))
+        {
+            //stream.Seek(0, SeekOrigin.Begin);
+            bitmap = new Bitmap(stream);
+        }
+        var bitmapCopy = new Bitmap(bitmap);
+
+        bitmapCopy.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
+    }
+    public string GetFullFileName(string filename)
+    {
+        return "C:\\Users\\user\\source\\repos\\ConsoleApp20-ServerChat\\ConsoleApp20-ServerChat\\ClientImages\\" + filename;
+    }
+    public bool DownloadImage(string filename)
+    {
+        var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+        socket.Connect(_endPoint);
+
+        socket.Send(BitConverter.GetBytes(0));
+        socket.Send(Encoding.UTF8.GetBytes(filename));
+
+        ReceiveFile(socket, GetFullFileName(filename));
+        
+        //SendFile(socket, filename);
+
+        socket.Close();
+        return true;
     }
 }
 

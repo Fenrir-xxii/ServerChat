@@ -219,6 +219,11 @@ public class ChatCore
             CreatedAt = DateTime.Now,
         };
         _db.Messages.Add(message);
+        request.Images.ForEach(image =>
+        {
+            var dbImage = new Image() { Filename = image.Filename };
+            message.Images.Add(dbImage);
+        });
         _db.SaveChanges();
 
         return new SendMessageResponse()
@@ -228,24 +233,47 @@ public class ChatCore
             Id = message.Id
         };
     }
+    private static List<ChatMessageImage> FromDbImages(ICollection<Image> images)
+    {
+        return new List<ChatMessageImage>(images.Select( x=> new ChatMessageImage
+        {
+            Id = x.Id, Filename = x.Filename
+        }).ToList());
+    }
     private IDataMessage HandleData(GetMessagesRequest request)
     {
         var bdTemp = new ChatDbContext();
         return new GetMessagesResponse()
         {
-            Messages = bdTemp.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver)
-            .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
-            .Where(x => x.Id > request.IdAfter)
-            .OrderBy(x => x.Id)
-            .Select(m => new ChatMessage
-            {
-                Id = m.Id,
-                TextMessage = m.TextContent,
-                CreatedAt = m.CreatedAt,
-                Sender = GetChatUserFromDbUser(m.Sender),
-                Receiver = GetChatUserFromDbUser(m.Receiver)
-            }).ToList()
+            Messages = bdTemp.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver).Include(x => x.Images)
+           .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
+           .Where(x => x.Id > request.IdAfter)
+           .OrderBy(x => x.Id)
+           .Select(m => new ChatMessage
+           {
+               Id = m.Id,
+               TextMessage = m.TextContent,
+               CreatedAt = m.CreatedAt,
+               Sender = GetChatUserFromDbUser(m.Sender),
+               Receiver = GetChatUserFromDbUser(m.Receiver),
+               Images = FromDbImages(m.Images)
+           }).ToList()
         };
+        //return new GetMessagesResponse()
+        //{
+        //    Messages = bdTemp.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver)
+        //    .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
+        //    .Where(x => x.Id > request.IdAfter)
+        //    .OrderBy(x => x.Id)
+        //    .Select(m => new ChatMessage
+        //    {
+        //        Id = m.Id,
+        //        TextMessage = m.TextContent,
+        //        CreatedAt = m.CreatedAt,
+        //        Sender = GetChatUserFromDbUser(m.Sender),
+        //        Receiver = GetChatUserFromDbUser(m.Receiver)
+        //    }).ToList()
+        //};
     }
     private IDataMessage HandleData(LogoutRequest request)
     {

@@ -95,13 +95,30 @@
                     </ListView.Resources>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel HorizontalAlignment="Right">
-                                <WrapPanel HorizontalAlignment="Right">
-                                    <TextBlock Text="{Binding Path=TextMessage}" FontWeight="Bold" FontSize="16"></TextBlock>
+                            <StackPanel>
+                                <ListView ItemsSource="{Binding Path=Images}">
+                                    <!--<ListView.Resources>
+                                        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+                                    </ListView.Resources>-->
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Path=Filename}" MaxWidth="320" MaxHeight="300" Stretch="Uniform"></Image>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListBox.Style>
+                                        <Style TargetType="{x:Type ListBox}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="False">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListBox.Style>
+                                </ListView>
+                                <TextBlock Text="{Binding Path=TextMessage}" FontWeight="Bold" FontSize="16"></TextBlock>
                                     <!--<TextBlock Text="" FontStyle="Italic"></TextBlock>-->
                                     <!--<TextBlock Text="{Binding Path=CreatedAt}" FontStyle="Italic"></TextBlock>-->
-                                </WrapPanel>
-                                <TextBlock FontSize="10" FontStyle="Italic">
+                                <TextBlock FontSize="10" FontStyle="Italic" Foreground="Gray">
                                     <!--<TextBlock Text="Sended: "></TextBlock>-->
                                     <TextBlock Text="{Binding Path=InfoText}"></TextBlock>
                                     <TextBlock Text=": "></TextBlock>
@@ -114,16 +131,41 @@
                 </ListView>
             </Border>
             <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="2" Grid.Column="1">
-                <TextBlock VerticalAlignment="Center">
-                    <TextBox Width="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16"></TextBox>
-                    <Button Height="30" Command="{Binding Path=AttachFileCommand}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--<TextBox MinWidth="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16" Margin="2"></TextBox>-->
+                    <TextBox Grid.Column="0" Width="Auto" MinWidth="520" MaxWidth="1000" MinHeight="30" MaxHeight="40" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="16" Margin="2"/>
+                    <Button  Grid.Column="1" Height="30" Command="{Binding Path=AttachFileCommand}"  Width="50">
+                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\attach.png" Margin="2"></Image>
+                    </Button>
+                    <!--<TextBlock Visibility="Hidden" Name="AttachCheck">
+                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\checkmark.jpg"></Image>
+                    </TextBlock>-->
+                    <Button  Grid.Column="2" Height="30" Command="{Binding Path=SendCommand}" Width="50" DockPanel.Dock="Right">
+                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\send2.png" Margin="1"></Image>
+                    </Button>
+                </Grid>
+            </Border>
+            <!--<Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="2" Grid.Column="1">
+                <DockPanel VerticalAlignment="Center" LastChildFill="True">
+                    --><!--<TextBox MinWidth="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16" Margin="2"></TextBox>--><!--
+                    <TextBox Width="Auto" MinWidth="520" MinHeight="30" MaxHeight="60" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="16" Margin="2"/>
+                    <Button Height="30" Command="{Binding Path=AttachFileCommand}"  Width="50">
                          <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\attach.png" Margin="2"></Image>
                     </Button>
-                    <Button Height="30" Command="{Binding Path=SendCommand}">
+                    --><!--<TextBlock Visibility="Hidden" Name="AttachCheck">
+                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\checkmark.jpg"></Image>
+                    </TextBlock>--><!--
+                    <Button Height="30" Command="{Binding Path=SendCommand}" Width="50" DockPanel.Dock="Right">
                          <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\send2.png" Margin="1"></Image>
                     </Button>
-                </TextBlock>
-            </Border>
+                </DockPanel>
+            </Border>-->
         </Grid>
     </Border>
 </Window>
