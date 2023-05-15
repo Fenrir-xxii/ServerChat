@@ -16,6 +16,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Data;
+using System.IO;
 
 namespace ClientWPF.ViewModels;
 
@@ -28,24 +29,9 @@ public class ChatViewModel : NotifyPropertyChangedBase
         _imageClient = new ImageClient("127.0.0.1", 4444);
         _users = new List<ChatUser> ();
         _images = new List<string> ();
-        _attachedImagePath = String.Empty;
-        _isAttached = false;
-        //_run = run;
         _lastSelectedUserId = -1;
-        //request for users and messages from db
-        //var request = new AllUsersRequest
-        //{
-        //    Login = _user.Login,
-        //};
-        //var response = _client.AllUsers(request);
-        //if (response.Success)
-        //{
-        //    _users = response.AllUsers;
-        //    OnPropertyChanged(nameof(Users));
-        //}
         GetUsers();
         _chatMessages = new List<ChatMessageModel>();
-        //GetMessages();
         UpdateMessagesTask();
         UpdateUserStatus();
         _textMessage = String.Empty;
@@ -126,13 +112,18 @@ public class ChatViewModel : NotifyPropertyChangedBase
             {
                 //MessageBox.Show("Success", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 _textMessage = String.Empty;
+                _images.Clear();
                 OnPropertyChanged(nameof(TextMessage));
-                //GetMessages();
+                OnPropertyChanged(nameof(AttachmentText));
             }
             else
             {
                 MessageBox.Show($"Error.\n{response.Error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        else
+        {
+            MessageBox.Show("Error.\n Response returned null", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }, x => (_textMessage.Length > 0  || _images.Count>0) && _selectedUser !=null);
     public void GetUsers()
@@ -157,11 +148,21 @@ public class ChatViewModel : NotifyPropertyChangedBase
         };
         var response = _client.GetMessages(request);
         
+        var files = Directory.GetFiles("C:\\Users\\user\\source\\repos\\ConsoleApp20-ServerChat\\ConsoleApp20-ServerChat\\ClientImages").ToList();
+        var clientImages = new List<string>();
+        files.ForEach(file => clientImages.Add(Path.GetFileName(file)));
+
         response.Messages.ForEach(m =>
         {
             m.Images.ForEach(image =>
             {
-                _imageClient.DownloadImage(image.Filename);
+                // check if file already exists
+                if(!clientImages.Contains(image.Filename))
+                {
+                    _imageClient.DownloadImage(image.Filename);
+                    //image.Filename = _imageClient.GetFullFileName(image.Filename);
+                }
+                //_imageClient.DownloadImage(image.Filename);
                 image.Filename = _imageClient.GetFullFileName(image.Filename);
             });
             _chatMessages.Add(new ChatMessageModel 
@@ -278,11 +279,14 @@ public class ChatViewModel : NotifyPropertyChangedBase
             }
             Application.Current.MainWindow.Show();
         });
-       
-        //REQUEST TO SERVER FOR OFFLINE USER
     }, x => true);
-    private string _attachedImagePath;
+
     private List<string> _images;
+
+    public string AttachmentText
+    {
+        get => $"{_images.Count} file(s) attached";
+    }
     public ICommand AttachFileCommand => new RelayCommand(x =>
     {
         _images.Clear();
@@ -294,8 +298,9 @@ public class ChatViewModel : NotifyPropertyChangedBase
         if (dialog.ShowDialog() == true)
         {
             _images.AddRange(dialog.FileNames);
-            _attachedImagePath = dialog.FileName;
-            _isAttached = true;
+            OnPropertyChanged(nameof(AttachmentText));
+            //_attachedImagePath = dialog.FileName;
+            //_isAttached = true;
             //System.Windows.Application.Current.Dispatcher.Invoke(
             // System.Windows.Threading.DispatcherPriority.Normal, (Action)delegate
             //{
@@ -315,14 +320,5 @@ public class ChatViewModel : NotifyPropertyChangedBase
         }
 
     }, x => true);
-    private bool _isAttached;
-    public bool IsAttached
-    {
-        get => _isAttached;
-        set
-        {
-            _isAttached = value;
-            OnPropertyChanged(nameof(IsAttached));
-        }
-    }
+   
 }

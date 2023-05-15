@@ -133,20 +133,22 @@
             <Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="2" Grid.Column="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80*"/>
+                        <ColumnDefinition Width="71*"/>
+                        <ColumnDefinition Width="9*"/>
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
 
                     <!--<TextBox MinWidth="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16" Margin="2"></TextBox>-->
-                    <TextBox Grid.Column="0" Width="Auto" MinWidth="520" MaxWidth="1000" MinHeight="30" MaxHeight="40" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="16" Margin="2"/>
-                    <Button  Grid.Column="1" Height="30" Command="{Binding Path=AttachFileCommand}"  Width="50">
+                    <TextBox Grid.Column="0" Width="Auto" MinWidth="400" MaxWidth="1000" MinHeight="30" MaxHeight="40" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="16" Margin="2"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Path=AttachmentText}" d:Text="1 File attached" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <Button Grid.Column="2" Height="30" Command="{Binding Path=AttachFileCommand}"  Width="50">
                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\attach.png" Margin="2"></Image>
                     </Button>
                     <!--<TextBlock Visibility="Hidden" Name="AttachCheck">
                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\checkmark.jpg"></Image>
                     </TextBlock>-->
-                    <Button  Grid.Column="2" Height="30" Command="{Binding Path=SendCommand}" Width="50" DockPanel.Dock="Right">
+                    <Button  Grid.Column="3" Height="30" Command="{Binding Path=SendCommand}" Width="50" DockPanel.Dock="Right">
                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\send2.png" Margin="1"></Image>
                     </Button>
                 </Grid>

@@ -53,6 +53,10 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
         }
         set
         {
+            if (!_isPasswordHidden)
+            {
+                (Application.Current.MainWindow as MainWindow).hiddenPass.Password = value;
+            }
             _password = value;
             OnPropertyChanged(nameof(Password));
         }
@@ -126,11 +130,13 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
                 MessageBox.Show($"Welcome {response.User.Name}.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 Application.Current.MainWindow.Hide();
                 _login = String.Empty;
-                _password = String.Empty;
-                Password = String.Empty;    
+                (Application.Current.MainWindow as MainWindow).hiddenPass.Password = "";
+                Password = String.Empty;
+                //var p = Password;    
                 OnPropertyChanged(nameof(Login));
                 OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(IsPasswordHidden));
+                //Application.Current.MainWindow.Hide();
                 //bool run = true;
                 var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
                 window.ShowDialog();
