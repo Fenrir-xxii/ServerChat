@@ -23,25 +23,18 @@ public class ImageServer
     {
         IPAddress ip = IPAddress.Parse(ipAddress);
         _endPoint = new IPEndPoint(ip, port);
-        //_db = new ChatDbContext();
     }
     public Action<Socket> Worker;
-    public void Listen()
-    {
-        _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
-        //try
-        //{
-            _socket.Bind(_endPoint);
-            _socket.Listen(100);
-            while (true)
-            {
-                Task.Run(() => Worker(_socket.Accept()));
-                Thread.Sleep(500);
-            }
-        //}
-        //catch (Exception e)
-        //{
-         //   Console.WriteLine(e.Message);
-        //}
-    }
+	public void Listen()
+	{
+		_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+		_socket.Bind(_endPoint);
+		_socket.Listen(100);
+		while (true)
+		{
+			Task.Run(() => Worker(_socket.Accept()));
+			Thread.Sleep(500);
+		}
+
+	}
 }

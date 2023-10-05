@@ -100,7 +100,6 @@ public class ChatCore
             {
                 var userFromDb = GetUserByLogin(request.Login);
                 var userFromDbPassword = GetPasswordFromLogin(userFromDb.Login.ToString());
-                //var pass = request.Password;
                
                 if (userFromDb != null)
                 {
@@ -259,21 +258,6 @@ public class ChatCore
                Images = FromDbImages(m.Images)
            }).ToList()
         };
-        //return new GetMessagesResponse()
-        //{
-        //    Messages = bdTemp.Messages.AsNoTracking().Include(x => x.Sender).Include(x => x.Receiver)
-        //    .Where(x => x.Sender.Id == request.Questioner.Id || x.Receiver.Id == request.Questioner.Id)
-        //    .Where(x => x.Id > request.IdAfter)
-        //    .OrderBy(x => x.Id)
-        //    .Select(m => new ChatMessage
-        //    {
-        //        Id = m.Id,
-        //        TextMessage = m.TextContent,
-        //        CreatedAt = m.CreatedAt,
-        //        Sender = GetChatUserFromDbUser(m.Sender),
-        //        Receiver = GetChatUserFromDbUser(m.Receiver)
-        //    }).ToList()
-        //};
     }
     private IDataMessage HandleData(LogoutRequest request)
     {

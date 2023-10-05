@@ -160,9 +160,7 @@ public class ChatViewModel : NotifyPropertyChangedBase
                 if(!clientImages.Contains(image.Filename))
                 {
                     _imageClient.DownloadImage(image.Filename);
-                    //image.Filename = _imageClient.GetFullFileName(image.Filename);
                 }
-                //_imageClient.DownloadImage(image.Filename);
                 image.Filename = _imageClient.GetFullFileName(image.Filename);
             });
             _chatMessages.Add(new ChatMessageModel 
@@ -254,7 +252,6 @@ public class ChatViewModel : NotifyPropertyChangedBase
     }
     public ICommand LogoutCommand => new RelayCommand(x =>
     {
-        //REDO
         var request = new LogoutRequest
         {
             User = _user
@@ -299,24 +296,6 @@ public class ChatViewModel : NotifyPropertyChangedBase
         {
             _images.AddRange(dialog.FileNames);
             OnPropertyChanged(nameof(AttachmentText));
-            //_attachedImagePath = dialog.FileName;
-            //_isAttached = true;
-            //System.Windows.Application.Current.Dispatcher.Invoke(
-            // System.Windows.Threading.DispatcherPriority.Normal, (Action)delegate
-            //{
-            //    for (int intCounter = App.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
-            //    {
-            //        if (!App.Current.Windows[intCounter].Equals(App.Current.MainWindow))
-            //        {
-            //            App.Current.Windows[intCounter].Dispatcher.Invoke(() =>
-            //            {
-            //                (App.Current.Windows[intCounter] as ChatWindow).AttachCheck.Visibility = Visibility.Visible;
-            //            });
-            //        }
-            //    }
-            //    //(App.Current.Windows[1] as ChatWindow).AttachCheck.Visibility = Visibility.Visible;
-            //});
-            //OnPropertyChanged(nameof(IsAttached));
         }
 
     }, x => true);

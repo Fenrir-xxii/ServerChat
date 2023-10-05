@@ -35,12 +35,9 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsOnline}" Value="True">
                                     <Setter Property="Foreground" Value="Green" />
-                                    <!--<Setter Property="Background" Value="Green" />-->
-                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Path=IsOnline}" Value="False">
                                     <Setter Property="Foreground" Value="DimGray" />
-                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -64,9 +61,6 @@
                         <ColumnDefinition Width="10*"></ColumnDefinition>
                         <ColumnDefinition Width="10*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <!--<Button Grid.Column="1" Margin="10" Command="{Binding Path=AddUserCommand}">
-                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\plus3.png" Stretch="Uniform"></Image>
-                    </Button>-->
                     <Button Grid.Column="2" Margin="10" Command="{Binding Path=LogoutCommand}">
                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\logout2.png" Margin="2"></Image>
                     </Button>
@@ -79,16 +73,11 @@
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Path=AmIReceiver}" Value="True">
                                     <Setter Property="Foreground" Value="Blue" />
-                                    <!--<Setter Property="Background" Value="Brown" />-->
-                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
                                     <Setter Property="HorizontalAlignment" Value="Left" ></Setter>
-                                    <!--<Setter Property="HorizontalContentAlignment" Value="Right"></Setter>-->
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Path=AmIReceiver}" Value="False">
                                     <Setter Property="Foreground" Value="Black" />
-                                    <!--<Setter Property="BorderBrush" Value="LightGoldenrodYellow" />-->
                                     <Setter Property="HorizontalAlignment" Value="Right" ></Setter>
-                                    <!--<Setter Property="HorizontalContentAlignment" Value="Right"></Setter>-->
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -97,9 +86,6 @@
                         <DataTemplate>
                             <StackPanel>
                                 <ListView ItemsSource="{Binding Path=Images}">
-                                    <!--<ListView.Resources>
-                                        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-                                    </ListView.Resources>-->
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Image Source="{Binding Path=Filename}" MaxWidth="320" MaxHeight="300" Stretch="Uniform"></Image>
@@ -116,10 +102,7 @@
                                     </ListBox.Style>
                                 </ListView>
                                 <TextBlock Text="{Binding Path=TextMessage}" FontWeight="Bold" FontSize="16"></TextBlock>
-                                    <!--<TextBlock Text="" FontStyle="Italic"></TextBlock>-->
-                                    <!--<TextBlock Text="{Binding Path=CreatedAt}" FontStyle="Italic"></TextBlock>-->
                                 <TextBlock FontSize="10" FontStyle="Italic" Foreground="Gray">
-                                    <!--<TextBlock Text="Sended: "></TextBlock>-->
                                     <TextBlock Text="{Binding Path=InfoText}"></TextBlock>
                                     <TextBlock Text=": "></TextBlock>
                                     <TextBlock Text="{Binding Path=CreatedAt, StringFormat='dd.MM.yyyy hh:mm'}" FontStyle="Italic"></TextBlock>
@@ -139,35 +122,16 @@
                         <ColumnDefinition Width="10*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!--<TextBox MinWidth="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16" Margin="2"></TextBox>-->
                     <TextBox Grid.Column="0" Width="Auto" MinWidth="400" MaxWidth="1000" MinHeight="30" MaxHeight="40" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="16" Margin="2"/>
                     <TextBlock Grid.Column="1" Text="{Binding Path=AttachmentText}" d:Text="1 File attached" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                     <Button Grid.Column="2" Height="30" Command="{Binding Path=AttachFileCommand}"  Width="50">
                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\attach.png" Margin="2"></Image>
                     </Button>
-                    <!--<TextBlock Visibility="Hidden" Name="AttachCheck">
-                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\checkmark.jpg"></Image>
-                    </TextBlock>-->
                     <Button  Grid.Column="3" Height="30" Command="{Binding Path=SendCommand}" Width="50" DockPanel.Dock="Right">
                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\send2.png" Margin="1"></Image>
                     </Button>
                 </Grid>
             </Border>
-            <!--<Border BorderThickness="2" BorderBrush="LightBlue" Grid.Row="2" Grid.Column="1">
-                <DockPanel VerticalAlignment="Center" LastChildFill="True">
-                    --><!--<TextBox MinWidth="520" Height="30" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" FontSize="16" Margin="2"></TextBox>--><!--
-                    <TextBox Width="Auto" MinWidth="520" MinHeight="30" MaxHeight="60" Text="{Binding Path=TextMessage, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="16" Margin="2"/>
-                    <Button Height="30" Command="{Binding Path=AttachFileCommand}"  Width="50">
-                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\attach.png" Margin="2"></Image>
-                    </Button>
-                    --><!--<TextBlock Visibility="Hidden" Name="AttachCheck">
-                        <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\checkmark.jpg"></Image>
-                    </TextBlock>--><!--
-                    <Button Height="30" Command="{Binding Path=SendCommand}" Width="50" DockPanel.Dock="Right">
-                         <Image Source="C:\Users\user\source\repos\ConsoleApp20-ServerChat\ClientWPF\send2.png" Margin="1"></Image>
-                    </Button>
-                </DockPanel>
-            </Border>-->
         </Grid>
     </Border>
 </Window>

@@ -49,40 +49,11 @@ public class ImageServerCore
         var bitmapCopy = new Bitmap(bitmap);
 
         bitmapCopy.Save(filename, System.Drawing.Imaging.ImageFormat.Jpeg);
-
-        //string outputFileName = "..."; 
-        //using (MemoryStream memory = new MemoryStream()) 
-        //{ 
-        //    using (FileStream fs = new FileStream(outputFileName, FileMode.Create, FileAccess.ReadWrite))
-        //    { 
-        //        thumbBMP.Save(memory, ImageFormat.Jpeg); 
-        //        byte[] bytes = memory.ToArray(); 
-        //        fs.Write(bytes, 0, bytes.Length); 
-        //    } 
-        //}
-
     }
-    //ns.Shutdown(SocketShutdown.Both);
-    //ns.Close();
-
-//Task.Run(async () =>
-//            {
-//                do
-//                {
-//                    Task t = new Task(() =>
-//                    {
-//                        worker(_socket.Accept());
-//                    });
-//t.Start();
-//                } while (true) ;
-//            });
-//    }
     protected void SendFile(Socket socket, string filename) 
     {
         if (!File.Exists(filename))
         {
-            // empty image file if file noty exists
-            //TODO
             return;
         }
 
@@ -95,13 +66,8 @@ public class ImageServerCore
             socket.Send(ms.ToArray());
         }
     }
-    //public void SaveFile(string fileName)
-    //{
-
-    //}
     public void Handle(Socket socket)
     {
-        // if ask get
         //get file
         byte[] requestTypeBuffer = new byte[sizeof(int)];
         socket.Receive(requestTypeBuffer);
@@ -132,8 +98,6 @@ public class ImageServerCore
                 break;
         }
 
-        //if ask upload
-        //upload file
     }
 
 }

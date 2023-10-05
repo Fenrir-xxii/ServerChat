@@ -131,51 +131,13 @@ public class MainWindowViewModel : NotifyPropertyChangedBase
                 Application.Current.MainWindow.Hide();
                 _login = String.Empty;
                 (Application.Current.MainWindow as MainWindow).hiddenPass.Password = "";
-                Password = String.Empty;
-                //var p = Password;    
+                Password = String.Empty;  
                 OnPropertyChanged(nameof(Login));
                 OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(IsPasswordHidden));
-                //Application.Current.MainWindow.Hide();
-                //bool run = true;
+
                 var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
                 window.ShowDialog();
-
-                //Thread t = new Thread(() =>
-                //{
-                //    var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
-                //    //Application.Current.MainWindow.Hide();
-                //    window.ShowDialog();
-                //});
-                //t.SetApartmentState(ApartmentState.STA);
-                //t.Start();
-                //while (true)
-                //{
-                //    if(!run)
-                //    {
-                //        t.Abort();
-                //        return;
-                //    }
-                //}
-                //t.Abort();
-                //t.Join();
-                //if (!run)
-                //{
-                //    t.Abort();
-                //}
-
-                //Task tsk = new Task(() =>
-                //{
-                //    var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id = response.User.Id });
-                //    //Application.Current.MainWindow.Hide();
-                //    window.ShowDialog();
-                //});
-                ////tsk.SetApartmentState(ApartmentState.STA);
-                //tsk.Start();
-
-                //var window = new ChatWindow(_client, new ChatUser { Login = response.User.Login, Name = response.User.Name, Id=response.User.Id});
-                //Application.Current.MainWindow.Hide();
-                //window.ShowDialog();
             }
             else
             {
